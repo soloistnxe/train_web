@@ -126,6 +126,7 @@ export default {
     async getRecommendQuestion (companyId) {
       const { data: res } = await this.$http.get('exam/recommend/' + companyId)
       if (res.code !== 200) {
+        this.$message.error('推荐问卷生成失败！')
         this.$message.error(res.message)
         window.sessionStorage.removeItem('activePath')
         this.$router.push({

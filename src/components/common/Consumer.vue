@@ -34,7 +34,7 @@
               <el-button type="success" icon="el-icon-view" size="mini"  @click="showDetail(scope.row)"></el-button>
             </el-tooltip>
             <!-- 修改按钮 -->
-            <el-button type="primary" icon="el-icon-edit" size="mini" @click="showEditDialog(scope.row.consumerId)"></el-button>
+            <el-button type="primary" icon="el-icon-edit" size="mini" @click="showEditDialog(scope.row)"></el-button>
             <!-- 删除按钮 -->
             <el-button type="danger" icon="el-icon-delete" size="mini"  @click="removeUserById(scope.row.consumerId)"></el-button>
           </template>
@@ -282,14 +282,9 @@ export default {
       })
     },
     // 展示编辑用户的对话框
-    async showEditDialog (id) {
+    async showEditDialog (list) {
       // console.log(id)
-      const { data: res } = await this.$http.get('consumer/findUserById/' + id)
-
-      if (res.code !== 200) {
-        return this.$message.error('查询用户信息失败！')
-      }
-      this.editForm = res.data.consumer
+      this.editForm = list
       this.editDialogVisible = true
     },
     // 监听修改用户对话框的关闭事件
@@ -302,7 +297,7 @@ export default {
         if (!valid) return
         // 发起修改用户信息的数据请求
         const { data: res } = await this.$http.post(
-          'consumer/update', this.$qs.stringify(this.editForm))
+          'consumer/updateConsumer', this.$qs.stringify(this.editForm))
         console.log(this.editForm)
         if (res.code !== 200) {
           return this.$message.error('更新用户信息失败！')
@@ -336,7 +331,7 @@ export default {
         return this.$message.info('已取消删除')
       }
 
-      const { data: res } = await this.$http.get('user/delete/' + userId)
+      const { data: res } = await this.$http.get('consumer/deleteConsumer/' + userId)
 
       if (res.code !== 200) {
         return this.$message.error('删除用户失败！')
